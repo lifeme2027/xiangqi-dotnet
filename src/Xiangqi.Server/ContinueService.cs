@@ -34,6 +34,10 @@ public sealed class ContinueService
 {
     public const string FeeLabel = "续弈服务费";
 
+    /// <summary>The configured price as "N KAS" (invariant culture, no trailing zeros), never hardcoded.</summary>
+    internal string AmountLabel() =>
+        (_options.PriceSompi / 100_000_000m).ToString("0.########", System.Globalization.CultureInfo.InvariantCulture) + " KAS";
+
     // Input size limits (all checked before any parsing / DB / network work).
     public const int MaxFenLength = 120;
     public const int MaxMovesLength = 20_000;
@@ -255,7 +259,7 @@ public sealed class ContinueService
             var s = Load(id);
             RequireToken(s, request?.Token);
             if (s.Status is "pending_auth" or "pending_payment")
-                throw new ApiException(402, $"请先支付{FeeLabel}（1 KAS）/ payment required");
+                throw new ApiException(402, $"请先支付{FeeLabel}（{AmountLabel()}）/ payment required");
             var game = Rebuild(s);
             if (game.Status != GameStatus.Ongoing)
                 throw new ApiException(409, "对局已结束 / game over");

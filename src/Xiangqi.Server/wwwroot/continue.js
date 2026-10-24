@@ -41,6 +41,10 @@
     });
   }
 
+  function kasLabel() {
+    return (cfg && cfg.amountKas != null ? cfg.amountKas : "") + " KAS";
+  }
+
   function info(text, kind) {
     const node = $("contInfo");
     node.textContent = text;
@@ -117,7 +121,7 @@
     if (res.status === 429) { info((res.data && res.data.error) || TOO_MANY, "error"); return; }
     if (!res.ok) { info((res.data && res.data.error) || "创建失败。", "error"); return; }
     await adopt(res.data, res.data.token);
-    info("续弈会话已创建，请签名并支付续弈服务费（1 KAS）。", "");
+    info("续弈会话已创建，请签名并支付续弈服务费（" + kasLabel() + "）。 Session created: sign, then pay the continue service fee (" + kasLabel() + ").", "");
   }
 
   function paintPay() {
@@ -130,7 +134,7 @@
     $("authFields").hidden = cs.status !== "pending_auth";
     const expiredPayable = cs.status === "expired" && cs.address;
     $("txFields").hidden = cs.status !== "pending_payment" && !expiredPayable;
-    $("kasBtn").textContent = cs.status === "pending_auth" ? "KasWare 连接并签名" : "KasWare 支付 1 KAS";
+    $("kasBtn").textContent = cs.status === "pending_auth" ? "KasWare 连接并签名" : "KasWare 支付 " + kasLabel();
   }
 
   async function auth(address, signature) {
@@ -139,7 +143,7 @@
     if (res.status === 429) { info((res.data && res.data.error) || TOO_MANY, "error"); return false; }
     if (!res.ok) { info((res.data && res.data.error) || "签名验证失败。", "error"); return false; }
     await adopt(res.data);
-    info("签名已验证，地址 " + address + "。请支付 1 KAS 续弈服务费。", "");
+    info("签名已验证，地址 " + address + "。请支付续弈服务费 " + kasLabel() + "。 Signature verified; please pay " + kasLabel() + ".", "");
     return true;
   }
 
@@ -255,6 +259,10 @@
       ? "续弈服务费 " + cfg.amountKas + " KAS / 局 · 收款地址 " + cfg.payToAddress
       : "断点续弈付费服务未开放：未配置收款地址。 Paid continue is not open (no pay-to address).";
     $("contCreate").disabled = !cfg.enabled;
+    $("contCreate").textContent = cfg.enabled ? "从此续下（" + kasLabel() + "）" : "从此续下";
+    const conf = cfg.minConfirmations != null ? String(cfg.minConfirmations) : "?";
+    $("contMinConf").textContent = conf;
+    $("contMinConfEn").textContent = conf;
     $("contLoad").addEventListener("submit", function (e) { void load(e); });
     $("plyPrev").onclick = function () { step(-1); };
     $("plyNext").onclick = function () { step(1); };
