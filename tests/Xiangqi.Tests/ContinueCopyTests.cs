@@ -66,9 +66,9 @@ public class ContinueCopyTests : IClassFixture<WebApplicationFactory<Program>>
         int help = html.IndexOf("id=\"payHelp\"", StringComparison.Ordinal);
         Assert.True(help > box);
         Assert.Contains("已付款但未激活，请联系站长并提供 txid", html);
-        Assert.Contains("[联系方式待补]", html);
+        Assert.Contains("chess@kastop.com", html);
         Assert.Contains("Paid but not activated", html);
-        Assert.Contains("[contact to be added]", html);
+        Assert.Contains("chess@kastop.com", html);
     }
 
     [Fact]
