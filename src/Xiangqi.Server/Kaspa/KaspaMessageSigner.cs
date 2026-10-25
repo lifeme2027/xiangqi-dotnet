@@ -32,11 +32,12 @@ public static class KaspaMessageSigner
         if (string.IsNullOrWhiteSpace(signature))
             return null;
         string s = signature.Trim();
-        if (s.StartsWith("0x", StringComparison.OrdinalIgnoreCase))
-            s = s[2..];
-        if (s.Length == 128)
+        // Hex: optional 0x prefix, exactly 128 hex chars. The prefix is only removed for a hex
+        // reading; a base64 string may legitimately begin with "0x" and must stay intact.
+        string hex = s.StartsWith("0x", StringComparison.OrdinalIgnoreCase) ? s[2..] : s;
+        if (hex.Length == 128)
         {
-            try { return Convert.FromHexString(s); } catch (FormatException) { }
+            try { return Convert.FromHexString(hex); } catch (FormatException) { }
         }
         try
         {
