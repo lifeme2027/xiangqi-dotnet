@@ -1,4 +1,4 @@
-// Ported from https://github.com/composehk/kaswallet (dotnet/src/KasWallet.Core).
+// Ported from https://github.com/lifeme2027/kaswallet (dotnet/src/KasWallet.Core).
 using System.Buffers.Binary;
 using System.Numerics;
 
