@@ -44,7 +44,7 @@ kaspa:qqcp4tea3q82cr9m9t3ctuc633ap89pd80jff5ma5v0a43rfhmw96fpnq6hu2
 
 ### 服务器端验证 Server-side verification
 
-- 签名：Kaspa personal message（BLAKE2b-256，key `PersonalMessageSigningHash`）上的 BIP340 Schnorr，公钥取自 `kaspa:` 版本 0 地址的 32 字节负载；时间戳须在 10 分钟内。Kaspa personal-message Schnorr signature, timestamp must be fresh (10 min).
+- 签名：Kaspa personal message（BLAKE2b-256，key `PersonalMessageSigningHash`）上的 BIP340 Schnorr，公钥取自 `kaspa:` 版本 0 地址的 32 字节负载；时间戳须在 10 分钟内；哈希、地址解析与签名验证使用 NuGet 包 [NKaspa](https://www.nuget.org/packages/NKaspa)。Kaspa personal-message Schnorr signature, timestamp must be fresh (10 min). Hashing, address parsing and verification use the NKaspa package.
 - 付款：通过 Kaspa REST（默认 `https://api.kaspa.org`）读取交易：`is_accepted`、确认数（默认 ≥ 10）、有输出给 `PayToAddress` 且 ≥ 100000000 sompi、输入来自已签名地址。Payment is read from the Kaspa REST API: accepted, ≥ 10 confirmations, an output of ≥ 1 KAS to the pay-to address, inputs from the signed address.
 - 防重放：txid 全局唯一（SQLite `UNIQUE` + `used_txids`，同事务写入）。Each txid can be used once, ever.
 - 仅支持 Schnorr 地址（`kaspa:q…`）。ECDSA / Tangem 地址不支持。Only Schnorr (`kaspa:q…`) addresses are supported; ECDSA / Tangem are not.

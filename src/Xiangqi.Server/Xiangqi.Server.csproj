@@ -20,7 +20,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Data.Sqlite" Version="8.0.10" />
-    <PackageReference Include="NBitcoin.Secp256k1" Version="3.1.6" />
+    <PackageReference Include="NKaspa" Version="0.1.11-alpha" />
   </ItemGroup>
 
   <!--
@@ -29,9 +29,7 @@
     The SDK folds SourceRevisionId into AssemblyInformationalVersion as "<version>+<sha>".
   -->
   <Target Name="StampBuildInfo" BeforeTargets="InitializeSourceControlInformation;GetAssemblyAttributes">
-    <Exec Condition="'$(SourceRevisionId)' == ''" Command="git rev-parse --short=12 HEAD"
-          WorkingDirectory="$(MSBuildProjectDirectory)" ConsoleToMSBuild="true" IgnoreExitCode="true"
-          StandardOutputImportance="low" StandardErrorImportance="low" ContinueOnError="true">
+    <Exec Condition="'$(SourceRevisionId)' == ''" Command="git rev-parse --short=12 HEAD" WorkingDirectory="$(MSBuildProjectDirectory)" ConsoleToMSBuild="true" IgnoreExitCode="true" StandardOutputImportance="low" StandardErrorImportance="low" ContinueOnError="true">
       <Output TaskParameter="ConsoleOutput" PropertyName="_StampGitSha" />
     </Exec>
     <PropertyGroup Condition="'$(SourceRevisionId)' == '' And '$(_StampGitSha)' != ''">
